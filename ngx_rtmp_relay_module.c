@@ -1296,7 +1296,7 @@ ngx_rtmp_relay_on_error(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
             v.level, v.code, v.desc);
 
     ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
-            "relay: onStatus error: level='%s'  code='%s' description='%s'",
+            "relay: _error: level='%s'  code='%s' description='%s'",
             v.level, v.code, v.desc);
 
     return NGX_OK;
