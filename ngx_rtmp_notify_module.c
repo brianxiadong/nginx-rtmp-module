@@ -1402,7 +1402,7 @@ next:
 
 
 static ngx_int_t
-ngx_rtmp_notify_play(ngx_rtmp_session_t *s, ngx_rtmp_play_t *v)
+    ngx_rtmp_notify_play(ngx_rtmp_session_t *s, ngx_rtmp_play_t *v)
 {
     ngx_rtmp_notify_app_conf_t     *nacf;
     ngx_rtmp_netcall_init_t         ci;

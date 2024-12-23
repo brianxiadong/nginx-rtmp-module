@@ -685,7 +685,16 @@ ngx_int_t
 ngx_rtmp_relay_push(ngx_rtmp_session_t *s, ngx_str_t *name,
         ngx_str_t *args, ngx_rtmp_relay_target_t *target)
 {
-    ngx_log_error(NGX_LOG_INFO, s->connection->log, 0,
+
+    // /* 打印推流相关的调试信息 */
+    // printf("[DEBUG] 开始创建推流连接\n");
+    // printf("[DEBUG] 推流名称: %.*s\n", (int)name->len, name->data);
+    // printf("[DEBUG] 推流参数: %.*s\n", (int)args->len, args->data);
+    // printf("[DEBUG] 目标应用: %.*s\n", (int)target->app.len, target->app.data);
+    // printf("[DEBUG] 播放路径: %.*s\n", (int)target->play_path.len, target->play_path.data);
+    // printf("[DEBUG] 目标URL: %.*s\n", (int)target->url.url.len, target->url.url.data);
+
+    ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
     "relay: create push name='%V' args='%V' app='%V' "
     "playpath='%V' url='%V'",
     name, args, &target->app, &target->play_path, &target->url.url);
@@ -1357,6 +1366,16 @@ ngx_rtmp_relay_on_status(ngx_rtmp_session_t *s, ngx_rtmp_header_t *h,
     ngx_log_debug3(NGX_LOG_DEBUG_RTMP, s->connection->log, 0,
             "relay: onStatus: level='%s' code='%s' description='%s'",
             v.level, v.code, v.desc);
+
+    // 只在发生错误时打印日志
+    if (ngx_strncmp(v.code, "NetStream.Play.Failed", 20) == 0 ||
+        ngx_strncmp(v.code, "NetStream.Publish.BadName", 24) == 0 ||
+        ngx_strncmp(v.code, "NetStream.Publish.Failed", 23) == 0)
+    {
+        ngx_log_error(NGX_LOG_ERR, s->connection->log, 0,
+                "relay: onStatus error: code='%s' description='%s'",
+                v.code, v.desc);
+    }
 
     return NGX_OK;
 }
